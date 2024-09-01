@@ -1,0 +1,19 @@
+{
+  "name": "contribution-notifications",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.1",
+    "@octokit/rest": "^21.0.2",
+    "@slack/web-api": "^7.3.4",
+    "discord.js": "^14.15.3",
+    "level": "^8.0.1",
+    "parse-diff": "^0.11.1"
+  }
+}
