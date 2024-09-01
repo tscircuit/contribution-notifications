@@ -1,9 +1,9 @@
 import { Octokit } from "@octokit/rest"
 import Anthropic from "@anthropic-ai/sdk"
 import { Level } from "level"
-import { PullRequest } from "./getMergedPRs"
+import type { PullRequest } from "./getMergedPRs"
 import { filterDiff } from "./filterDiff"
-import { AnalyzedPR } from "../index"
+import type { AnalyzedPR } from "../index"
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -50,7 +50,7 @@ Impact: [Major/Minor/Tiny]`
       messages: [{ role: "user", content: prompt }],
     })
 
-    const content = message.content[0].text
+    const content = (message.content[0] as any).text ?? ""
     const description =
       content.split("Description:")?.[1]?.split("Impact:")[0] ?? ""
     const impact = content.split("Impact:")?.[1] ?? ""

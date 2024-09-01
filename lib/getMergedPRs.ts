@@ -1,5 +1,5 @@
 import { octokit } from "../index"
-import axios from "redaxios"
+import axios from "axios"
 
 export interface PullRequest {
   number: number

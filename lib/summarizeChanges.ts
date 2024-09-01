@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk"
-import { AnalyzedPR } from "../index"
+import type { AnalyzedPR } from "../index"
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -18,5 +18,5 @@ Provide a concise summary of the overall changes and their significance.`
     messages: [{ role: "user", content: prompt }],
   })
 
-  return message.content[0].text
+  return (message.content[0] as any).text ?? ""
 }
