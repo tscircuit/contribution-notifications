@@ -37,6 +37,26 @@ async function postToSlack(message: string) {
   }
 }
 
+async function postToHttpWebhook(message: string) {
+  if (process.env.HTTP_WEBHOOK_URL) {
+    try {
+      const response = await fetch(process.env.HTTP_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      })
+
+      if (!response.ok) {
+        console.warn(`HTTP webhook request failed with status ${response.status}`)
+      }
+    } catch (error) {
+      console.error('Error sending HTTP webhook:', error)
+    }
+  }
+}
+
 export async function notifyPRChange(pr: AnalyzedPR) {
   const message = `
 [${pr.state === "merged" ? "merged" : "opened"}] ${pr.contributor} ${pr.impact} PR in ${pr.repo}: ${pr.url}
@@ -44,4 +64,5 @@ ${pr.description.slice(0, 300).replace(/\n/g, " ")}`.trim()
 
   await postToDiscord(message)
   await postToSlack(message)
+  await postToHttpWebhook(message)
 }
