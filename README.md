@@ -42,13 +42,18 @@ This project is designed to monitor and analyze pull requests (PRs) for a specif
    DISCORD_WEBHOOK_URL=your_discord_webhook_url
    SLACK_BOT_TOKEN=your_slack_bot_token
    SLACK_CHANNEL_ID=your_slack_channel_id
+   HTTP_WEBHOOK_URL=your_http_webhook_url
    GITHUB_ORG=your_github_organization_name
    FULL_REPO_LIST=repo1,repo2,repo3
    ```
 
+   Note: The `HTTP_WEBHOOK_URL` is optional. If provided, the script will send notifications to this URL as well.
+
 ## Usage
 
-To run the script:
+### Running Locally
+
+To run the script locally:
 
 ```bash
 bun run index.ts
@@ -72,6 +77,51 @@ This will:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Setting up GitHub Workflow
+
+To set up a GitHub workflow that uses contribution-notifications:
+
+1. Create a new file in your repository at `.github/workflows/contribution-notifications.yml`
+2. Add the following content to the file:
+
+   ```yaml
+   name: Contribution Notifications
+
+   on:
+     schedule:
+       - cron: '0 * * * *'  # Run every hour
+     workflow_dispatch:  # Allow manual triggering
+
+   jobs:
+     run-notifications:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v3
+         - uses: oven-sh/setup-bun@v1
+           with:
+             bun-version: latest
+         - name: Run contribution-notifications
+           uses: tscircuit/contribution-notifications@main
+           env:
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+             ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+             DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+             SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+             SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+             HTTP_WEBHOOK_URL: ${{ secrets.HTTP_WEBHOOK_URL }}
+             GITHUB_ORG: your_github_organization_name
+             FULL_REPO_LIST: 'true'
+   ```
+
+3. Replace `your_github_organization_name` with your actual GitHub organization name.
+4. Set up the necessary secrets in your GitHub repository settings:
+   - `ANTHROPIC_API_KEY`
+   - `DISCORD_WEBHOOK_URL` (if using Discord notifications)
+   - `SLACK_BOT_TOKEN` and `SLACK_CHANNEL_ID` (if using Slack notifications)
+   - `HTTP_WEBHOOK_URL` (if using HTTP webhook notifications)
+
+This workflow will run the contribution-notifications script every hour and can also be triggered manually.
 
 ## License
 
