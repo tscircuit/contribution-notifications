@@ -1,26 +1,33 @@
 import { octokit } from "../index"
 
 export async function getRepos(): Promise<string[]> {
-  if (process.env.FULL_REPO_LIST) {
+  const org = process.env.GITHUB_ORG
+
+  if (!org) {
+    throw new Error("GITHUB_ORG environment variable is not set")
+  }
+
+  if (process.env.FULL_REPO_LIST === "true") {
     return await octokit.rest.repos
       .listForOrg({
-        org: "tscircuit",
+        org,
         type: "public",
         per_page: 100,
       })
       .then((res) => res.data.map((repo) => repo.full_name))
   }
 
+  // Default list of repositories if FULL_REPO_LIST is not set to "true"
   return [
-    "tscircuit/tscircuit",
-    "tscircuit/cli",
-    "tscircuit/react-fiber",
-    "tscircuit/builder",
-    "tscircuit/schematic-viewer",
-    "tscircuit/pcb-viewer",
-    "tscircuit/3d-viewer",
-    "tscircuit/soup",
-    "tscircuit/props",
-    "tscircuit/jscad-fiber",
+    `${org}/tscircuit`,
+    `${org}/cli`,
+    `${org}/react-fiber`,
+    `${org}/builder`,
+    `${org}/schematic-viewer`,
+    `${org}/pcb-viewer`,
+    `${org}/3d-viewer`,
+    `${org}/soup`,
+    `${org}/props`,
+    `${org}/jscad-fiber`,
   ]
 }
