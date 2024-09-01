@@ -16,7 +16,7 @@ export interface PullRequest {
 
 export async function getMergedPRs(
   repo: string,
-  since: string
+  since: string,
 ): Promise<PullRequest[]> {
   const [owner, repo_name] = repo.split("/")
   const { data } = await octokit.pulls.list({
@@ -29,7 +29,7 @@ export async function getMergedPRs(
   })
 
   const filteredPRs = data.filter(
-    (pr) => pr.merged_at && new Date(pr.merged_at) >= new Date(since)
+    (pr) => pr.merged_at && new Date(pr.merged_at) >= new Date(since),
   )
 
   return await fetchPRsWithDiff(owner, repo_name, filteredPRs)
@@ -37,7 +37,7 @@ export async function getMergedPRs(
 
 export async function getOpenedPRs(
   repo: string,
-  since: string
+  since: string,
 ): Promise<PullRequest[]> {
   const [owner, repo_name] = repo.split("/")
   const { data } = await octokit.pulls.list({
@@ -50,7 +50,7 @@ export async function getOpenedPRs(
   })
 
   const filteredPRs = data.filter(
-    (pr) => new Date(pr.created_at) >= new Date(since)
+    (pr) => new Date(pr.created_at) >= new Date(since),
   )
 
   return await fetchPRsWithDiff(owner, repo_name, filteredPRs)
@@ -59,7 +59,7 @@ export async function getOpenedPRs(
 async function fetchPRsWithDiff(
   owner: string,
   repo_name: string,
-  prs: any[]
+  prs: any[],
 ): Promise<PullRequest[]> {
   // Fetch diff content for each PR
   const prsWithDiff = await Promise.all(
@@ -77,7 +77,7 @@ async function fetchPRsWithDiff(
         ...pr,
         diff: diffData as unknown as string,
       }
-    })
+    }),
   )
 
   return prsWithDiff as PullRequest[]

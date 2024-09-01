@@ -7,7 +7,10 @@ export async function getRepos(): Promise<string[]> {
     throw new Error("GITHUB_ORG environment variable is not set")
   }
 
-  if (process.env.FULL_REPO_LIST === "true") {
+  if (
+    process.env.FULL_REPO_LIST === "true" ||
+    process.env.FULL_REPO_LIST === "all"
+  ) {
     return await octokit.rest.repos
       .listForOrg({
         org,
@@ -20,17 +23,7 @@ export async function getRepos(): Promise<string[]> {
     return process.env.FULL_REPO_LIST.split(",").map((repo) => repo.trim())
   }
 
-  // Default list of repositories if FULL_REPO_LIST is not set
-  return [
-    `${org}/tscircuit`,
-    `${org}/cli`,
-    `${org}/react-fiber`,
-    `${org}/builder`,
-    `${org}/schematic-viewer`,
-    `${org}/pcb-viewer`,
-    `${org}/3d-viewer`,
-    `${org}/soup`,
-    `${org}/props`,
-    `${org}/jscad-fiber`,
-  ]
+  throw new Error(
+    'FULL_REPO_LIST environment variable is not set, for all repos set to "true" or "all"',
+  )
 }
