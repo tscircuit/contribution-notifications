@@ -15,9 +15,12 @@ export async function getRepos(): Promise<string[]> {
         per_page: 100,
       })
       .then((res) => res.data.map((repo) => repo.full_name))
+  } else if (process.env.FULL_REPO_LIST) {
+    // If FULL_REPO_LIST is set but not "true", treat it as a comma-separated list of repos
+    return process.env.FULL_REPO_LIST.split(",").map((repo) => repo.trim())
   }
 
-  // Default list of repositories if FULL_REPO_LIST is not set to "true"
+  // Default list of repositories if FULL_REPO_LIST is not set
   return [
     `${org}/tscircuit`,
     `${org}/cli`,

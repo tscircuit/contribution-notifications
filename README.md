@@ -63,7 +63,10 @@ This will:
 
 ## Customization
 
-- To monitor specific repositories instead of all public repos in the organization, set `FULL_REPO_LIST=false` in your `.env` file and update the `getRepos` function in `lib/getRepos.ts`.
+- To monitor specific repositories, you can set the `FULL_REPO_LIST` environment variable in your `.env` file:
+  - Set `FULL_REPO_LIST=true` to monitor all public repositories in the organization.
+  - Set `FULL_REPO_LIST=repo1,repo2,repo3` to monitor specific repositories (comma-separated list).
+  - Leave `FULL_REPO_LIST` unset or empty to use the default list of repositories defined in `lib/getRepos.ts`.
 - Adjust the time range for fetching PRs by modifying the `Date.now() - 3600000` value in `index.ts`.
 
 ## Contributing

@@ -32,9 +32,38 @@ export async function getMergedPRs(
     (pr) => pr.merged_at && new Date(pr.merged_at) >= new Date(since)
   )
 
+  return await fetchPRsWithDiff(owner, repo_name, filteredPRs)
+}
+
+export async function getOpenedPRs(
+  repo: string,
+  since: string
+): Promise<PullRequest[]> {
+  const [owner, repo_name] = repo.split("/")
+  const { data } = await octokit.pulls.list({
+    owner,
+    repo: repo_name,
+    state: "open",
+    sort: "created",
+    direction: "desc",
+    per_page: 100,
+  })
+
+  const filteredPRs = data.filter(
+    (pr) => new Date(pr.created_at) >= new Date(since)
+  )
+
+  return await fetchPRsWithDiff(owner, repo_name, filteredPRs)
+}
+
+async function fetchPRsWithDiff(
+  owner: string,
+  repo_name: string,
+  prs: any[]
+): Promise<PullRequest[]> {
   // Fetch diff content for each PR
   const prsWithDiff = await Promise.all(
-    filteredPRs.map(async (pr) => {
+    prs.map(async (pr) => {
       const { data: diffData } = await octokit.pulls.get({
         owner,
         repo: repo_name,
