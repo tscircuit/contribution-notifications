@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: bun install
 
-    - name: Run script
+    - name: Run PR analysis script
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ANTHROPIC_API_KEY: ${{ secrets.TSCIRCUIT_BOT_ANTHROPIC_API_KEY }}
@@ -31,3 +31,11 @@ jobs:
         GITHUB_ORG: 'tscircuit'
         FULL_REPO_LIST: 'true'
       run: bun run index.ts
+
+    - name: Run issue notifications script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ISSUES_DISCORD_WEBHOOK_URL: ${{ secrets.ISSUES_DISCORD_WEBHOOK_URL }}
+        GITHUB_ORG: 'tscircuit'
+        FULL_REPO_LIST: 'true'
+      run: bun run issue-notifications
