@@ -38,4 +38,4 @@ jobs:
         ISSUES_DISCORD_WEBHOOK_URL: ${{ secrets.ISSUES_DISCORD_WEBHOOK_URL }}
         GITHUB_ORG: 'tscircuit'
         FULL_REPO_LIST: 'true'
-      run: bun run issue-notifications
+      run: bun run scripts/issue-notifications.ts
