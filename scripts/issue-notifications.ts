@@ -29,7 +29,7 @@ async function getRecentIssues(repo: string): Promise<Issue[]> {
     direction: "desc",
   })
 
-  return data.filter((issue) => !issue.pull_request) as Issue[]
+  return data.filter((issue) => !issue.pull_request && new Date(issue.created_at) >= new Date(sixtyMinutesAgo)) as Issue[]
 }
 
 async function notifyDiscord(issue: Issue, repo: string) {
