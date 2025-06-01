@@ -4,7 +4,9 @@ import { getRepos } from "../lib/getRepos"
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
-const discordWebhook = new WebhookClient({ url: process.env.ISSUES_DISCORD_WEBHOOK_URL || "" })
+const discordWebhook = new WebhookClient({
+  url: process.env.ISSUES_DISCORD_WEBHOOK_URL || "",
+})
 
 interface Issue {
   number: number
@@ -29,18 +31,28 @@ async function getRecentIssues(repo: string): Promise<Issue[]> {
     direction: "desc",
   })
 
-  return data.filter((issue) => !issue.pull_request && new Date(issue.created_at) >= new Date(sixtyMinutesAgo)) as Issue[]
+  return data.filter(
+    (issue) =>
+      !issue.pull_request &&
+      new Date(issue.created_at) >= new Date(sixtyMinutesAgo),
+  ) as Issue[]
 }
 
 async function notifyDiscord(issues: Issue[], repo: string) {
   if (issues.length === 0) return
 
-  const messageContent = `New issues in ${repo}:\n` + 
-    issues.map(issue => `• #${issue.number} ${issue.title} by ${issue.user.login} - <${issue.html_url}>`).join('\n')
+  const messageContent =
+    `New issues in ${repo}:\n` +
+    issues
+      .map(
+        (issue) =>
+          `• #${issue.number} ${issue.title} by ${issue.user.login} - <${issue.html_url}>`,
+      )
+      .join("\n")
 
   const messageOptions: MessageCreateOptions = {
     content: messageContent,
-    allowedMentions: { parse: [] }  // This prevents link previews
+    allowedMentions: { parse: [] }, // This prevents link previews
   }
 
   await discordWebhook.send(messageOptions)

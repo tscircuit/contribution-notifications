@@ -41,18 +41,20 @@ async function postToHttpWebhook(message: string) {
   if (process.env.HTTP_WEBHOOK_URL) {
     try {
       const response = await fetch(process.env.HTTP_WEBHOOK_URL, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ message }),
       })
 
       if (!response.ok) {
-        console.warn(`HTTP webhook request failed with status ${response.status}`)
+        console.warn(
+          `HTTP webhook request failed with status ${response.status}`,
+        )
       }
     } catch (error) {
-      console.error('Error sending HTTP webhook:', error)
+      console.error("Error sending HTTP webhook:", error)
     }
   }
 }

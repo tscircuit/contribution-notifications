@@ -6,7 +6,7 @@ This project is designed to monitor and analyze pull requests (PRs) for a specif
 
 - Monitors multiple repositories within a specified GitHub organization
 - Analyzes opened and merged pull requests
-- Filters out PRs from bots (e.g., Renovate)
+- Filters out PRs from bots (e.g., Renovate & tscircuitbot)
 - Sends notifications to Discord and Slack
 - Generates a summary of changes
 - Caches PR analysis results using LevelDB

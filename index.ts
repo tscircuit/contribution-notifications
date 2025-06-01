@@ -38,7 +38,10 @@ async function main() {
     )
 
     for (const pr of [...mergedPRs, ...openedPRs]) {
-      if (pr.user.login.includes("renovate")) {
+      if (
+        pr.user.login.includes("renovate") ||
+        pr.user.login.includes("tscircuitbot")
+      ) {
         continue
       }
       const analysis = await analyzePRWithClaude(
