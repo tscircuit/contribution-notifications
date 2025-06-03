@@ -1,4 +1,8 @@
-# Contribution Notifications
+# Contribution Notifications (ARCHIVED)
+
+This code has been moved to the [contribution-tracker](https://github.com/tscircuit/contribution-tracker)
+
+---
 
 This project is designed to monitor and analyze pull requests (PRs) for a specified GitHub organization. It provides notifications about new and merged PRs, along with a summary of changes, through Discord and Slack.
 
